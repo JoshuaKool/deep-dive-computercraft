@@ -9,10 +9,11 @@ local function download(url, path)
 
         local startupFile = fs.open("startup.lua", "w")
         startupFile.write("shell.run('loading.lua')")
-        sleep(4)
         startupFile.close()
 
         shell.run("reboot")
+
+        sleep(4)
     else
         print("Failed to download " , path)
     end
