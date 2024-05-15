@@ -1,1 +1,2 @@
-print("hello")
+local function start()
+end
