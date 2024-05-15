@@ -6,9 +6,10 @@ local function download(url, path)
         local file = fs.open(path, "w")
         file.write(content)
         file.close()
-
-        shell.run("reboot")
+        
         shell.run("startup.lua")
+        shell.run("reboot")
+        
     else
         print("Failed to download " , path)
     end
