@@ -15,7 +15,7 @@ else
     monitor.write("Start")
 
     local function checkClickPosition()
-        if mouseWidth > 1 and mouseWidth < 5 and mouseHeight > 1 and mouseHeight < 2 then
+        if mouseWidth > 1 and mouseWidth < 5 and mouseHeight > 1 and mouseHeight < 3 then
             shell.run("button.lua")
         end
     end
