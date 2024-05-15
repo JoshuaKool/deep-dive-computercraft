@@ -1,20 +1,22 @@
 local monitor = peripheral.find("monitor")
-monitor.clear()
+local loop = true
+local button = require("button")
 
 if monitor == nil then
     print("No monitor found")
     return
 else
-    local buttoncollor = colors.red
+    local buttoncollor = button.screen()
 
     local function getClick()
         local event, side, x, y = os.pullEvent("monitor_touch")
         shell.run("loading.lua")
     end
-    while true do
+    while loop == true do
         getClick()
         if getClick() then
-            break
+            loop = false
+            return
         end
     end
 end
