@@ -12,8 +12,6 @@ local function download(url, path)
         startupFile.close()
 
         shell.run("reboot")
-
-        sleep(4)
     else
         print("Failed to download " , path)
     end
