@@ -1,4 +1,5 @@
 local monitor = peripheral.find("monitor")
+monitor.clear()
 
 if monitor == nil then
     print("No monitor found")
