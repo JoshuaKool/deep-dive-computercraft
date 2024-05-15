@@ -60,6 +60,5 @@ else
     sleep(1)
     monitor.clear()
 end
-
-shell.run("button.lua")
 sleep(2)
+shell.run("button.lua")
