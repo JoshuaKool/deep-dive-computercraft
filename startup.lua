@@ -9,7 +9,7 @@ if monitor == nil then
 else
     local x, y = monitor.getSize()
     monitor.clear()
-    monitor.SetBackgroundColour(colors.limegreen)
+    monitor.setBackgroundColor(colors.green)
     monitor.setTextColour(colors.white)
     monitor.setCursorPos(1, 1)
     monitor.write("Start")
