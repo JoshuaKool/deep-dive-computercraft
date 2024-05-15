@@ -21,9 +21,11 @@ else
     end
 
     while true do
-        local event, side, x, y = os.pullEvent("monitor_touch")
-        mouseWidth = x
-        mouseHeight = y
-        checkClickPosition()
+        local event, side, x, y = os.pullEvent()
+        if event == "monitor_touch" then
+            mouseWidth = x
+            mouseHeight = y
+            checkClickPosition() 
+        end
     end
 end
