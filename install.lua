@@ -19,7 +19,6 @@ end
 
 local function install()
     download("https://raw.githubusercontent.com/JoshuaKool/deep-dive-computercraft/main/loading.lua", "loading.lua")
-    sleep(2)
     download("https://raw.githubusercontent.com/JoshuaKool/deep-dive-computercraft/main/button.lua", "button.lua")
 end
 
