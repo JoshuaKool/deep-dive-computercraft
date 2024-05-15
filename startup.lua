@@ -1,22 +1,29 @@
+local mouseWidth = 0
+local mouseHeight = 0
 local monitor = peripheral.find("monitor")
-local loop = true
-local button = require("button")
+
 
 if monitor == nil then
     print("No monitor found")
     return
 else
-    local buttoncollor = button.screen()
+    local x, y = monitor.getSize()
+    monitor.clear()
+    monitor.SetBackgroundColour((colours.lime))
+    monitor.setTextColour(colours.white)
+    monitor.setCursorPos(1, 1)
+    monitor.write("Start")
 
-    local function getClick()
-        local event, side, x, y = os.pullEvent("monitor_touch")
-        shell.run("loading.lua")
-    end
-    while loop == true do
-        getClick()
-        if getClick() then
-            loop = false
-            return
+    local function checkClickPosition()
+        if mouseWidth > 1 and mouseWidth < 6 and mouseHeight > 1 and mouseHeight < 3 then
+            shall.run("button.lua")
         end
+    end
+
+    while true do
+        local event, side, x, y = os.pullEvent("monitor_touch")
+        mouseWidth = x
+        mouseHeight = y
+        checkClickPosition()
     end
 end
