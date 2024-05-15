@@ -62,3 +62,4 @@ else
 end
 
 shell.run("button.lua")
+sleep(2)
