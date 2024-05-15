@@ -10,8 +10,8 @@ else
     local x, y = monitor.getSize()
     monitor.clear()
     monitor.setBackgroundColor(colors.green)
-    monitor.setTextColour(colors.white)
-    monitor.setCursorPos(1, 1)
+    monitor.setTextColor(colors.white)
+    monitor.setCursorPos(1, 2)
     monitor.write("Start")
 
     local function checkClickPosition()
