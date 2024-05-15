@@ -9,14 +9,14 @@ if monitor == nil then
 else
     local x, y = monitor.getSize()
     monitor.clear()
-    monitor.SetBackgroundColour((colours.lime))
-    monitor.setTextColour(colours.white)
+    monitor.SetBackgroundColour(0.19607843137255, 0.80392156862745, 0.19607843137255)
+    monitor.setTextColour(1, 1, 1)
     monitor.setCursorPos(1, 1)
     monitor.write("Start")
 
     local function checkClickPosition()
         if mouseWidth > 1 and mouseWidth < 6 and mouseHeight > 1 and mouseHeight < 3 then
-            shall.run("button.lua")
+            shell.run("button.lua")
         end
     end
 
