@@ -6,8 +6,7 @@ local function download(url, path)
         local file = fs.open(path, "w")
         file.write(content)
         file.close()
-        
-        shell.run("startup.lua")
+
         shell.run("reboot")
         
     else
@@ -18,3 +17,5 @@ end
 download("https://raw.githubusercontent.com/JoshuaKool/deep-dive-computercraft/main/startup.lua", "startup.lua")
 download("https://raw.githubusercontent.com/JoshuaKool/deep-dive-computercraft/main/loading.lua", "loading.lua")
 download("https://raw.githubusercontent.com/JoshuaKool/deep-dive-computercraft/main/button.lua", "button.lua")
+
+shell.run("startup.lua")
