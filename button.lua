@@ -1,4 +1,5 @@
 -- local function start()
 -- end
+local monitor = peripheral.find("monitor")
 
-print("button")
+monitor.write("button")
