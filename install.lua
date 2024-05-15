@@ -8,6 +8,7 @@ local function download(url, path)
         file.close()
 
         local startupFile = fs.open("startup.lua", "w")
+        startupFile.write("shell.run('button.lua')")
         startupFile.close()
 
         shell.run("reboot")
