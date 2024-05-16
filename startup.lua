@@ -6,6 +6,7 @@ if monitor == nil then
     print("No monitor found")
     return
 else
+
     local function drawButton()
         local monitorWidth, monitorHeight = monitor.getSize()
         monitor.clear()
@@ -27,6 +28,12 @@ else
     end
 
     local function checkClickPosition()
+        local monitorWidth, monitorHeight = monitor.getSize()
+        local startText = "Start"
+        local startTextWidth = #startText
+        local startX = math.floor((monitorWidth - startTextWidth) / 2)
+        local startY = math.floor(monitorHeight / 2)
+
         if mouseWidth >= startX and mouseWidth <= startX + startTextWidth - 1
             and mouseHeight == startY then
             os.run({}, "loading.lua")
