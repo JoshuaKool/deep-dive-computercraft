@@ -13,7 +13,7 @@ else
     monitor.setTextColor(colors.white)
 
     local startText = "Start"
-    local startTextWidth = #startText * 2
+    local startTextWidth = #startText * 1
     local startX = math.floor((monitorWidth - startTextWidth) / 2) + 1
     local startY = math.floor(monitorHeight / 2)
 
