@@ -5,22 +5,6 @@ if monitor == nil then
     return
 end
 
-local monitorWidth, monitorHeight = monitor.getSize()
-
-if monitorWidth < 36 then
-    monitor.setTextScale(4)
-    monitor.clear()
-    monitor.setCursorPos(1, 1)
-    monitor.write("Monitor width is too small")
-    return
-elseif monitorHeight < 13 then
-    monitor.setTextScale(6)
-    monitor.clear()
-    monitor.setCursorPos(1, 1)
-    monitor.write("Monitor height is too small")
-    return
-end
-
 monitor.setTextScale(1)
 monitor.setBackgroundColor(colors.black)
 monitor.clear()
@@ -51,6 +35,22 @@ end
 while true do
     local chest = peripheral.find("minecraft:chest")
     local barrel = peripheral.find("minecraft:barrel")
+
+    local monitorWidth, monitorHeight = monitor.getSize()
+
+    if monitorWidth < 36 then
+        monitor.setTextScale(4)
+        monitor.clear()
+        monitor.setCursorPos(1, 1)
+        monitor.write("Monitor width is too small")
+        return
+    elseif monitorHeight < 13 then
+        monitor.setTextScale(6)
+        monitor.clear()
+        monitor.setCursorPos(1, 1)
+        monitor.write("Monitor height is too small")
+        return
+    end
 
     if chest == nil and barrel == nil then
         monitor.clear()
