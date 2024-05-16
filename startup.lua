@@ -8,7 +8,7 @@ else
     local function drawButton()
         local monitorWidth, monitorHeight = monitor.getSize()
         monitor.clear()
-        monitor.setTextScale(2)
+        monitor.setTextScale(1)
         monitor.setTextColor(colors.white)
 
         local startText = "Start"
