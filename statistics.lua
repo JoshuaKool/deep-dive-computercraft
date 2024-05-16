@@ -9,13 +9,13 @@ monitor.setTextScale(1)
 monitor.setBackgroundColor(colors.black)
 monitor.clear()
 
-local function drawProgressBar(monitor, usedSlots, totalSlots)
+local function drawProgressBar(monitor, fullStackSlots, totalSlots)
     local width, height = monitor.getSize()
     local barLength = width
-    local filledLength = math.floor((usedSlots / totalSlots) * barLength)
+    local filledLength = math.floor((fullStackSlots / totalSlots) * barLength)
     local emptyLength = barLength - filledLength
 
-    local barYPos = math.floor(height / 2) -- Center the progress bar vertically
+    local barYPos = math.floor(height / 2)
     monitor.setCursorPos(1, barYPos)
     monitor.setBackgroundColor(colors.green)
     monitor.write(string.rep(" ", filledLength))
@@ -24,39 +24,14 @@ local function drawProgressBar(monitor, usedSlots, totalSlots)
     monitor.setBackgroundColor(colors.black)
 end
 
-local function countStacks(inventory)
-    local totalItems = 0
+local function countFullStacks(inventory)
+    local fullStackSlots = 0
     for slot, item in pairs(inventory) do
-        totalItems = totalItems + item.count
+        if item.count == 64 then
+            fullStackSlots = fullStackSlots + 1
+        end
     end
-    return math.floor(totalItems / 64), totalItems % 64
-end
-
-local function printInventoryStatistics(monitor, inventory, title)
-    local width, height = monitor.getSize()
-    local yPos = 1
-
-    monitor.clear()
-    monitor.setCursorPos(1, yPos)
-    monitor.write(title)
-    yPos = yPos + 1
-
-    local fullStacks, remainingItems = countStacks(inventory)
-    monitor.setCursorPos(1, yPos)
-    monitor.write("Full Stacks: " .. fullStacks)
-    yPos = yPos + 1
-    monitor.setCursorPos(1, yPos)
-    monitor.write("Remaining Items: " .. remainingItems)
-    yPos = yPos + 1
-
-    for slot, item in pairs(inventory) do
-        item.name = item.name:gsub("minecraft:", "")
-        local text = item.name .. " x" .. item.count
-        local xPos = math.floor((width - #text) / 2)
-        monitor.setCursorPos(xPos, yPos)
-        monitor.write(text)
-        yPos = yPos + 1
-    end
+    return fullStackSlots
 end
 
 while true do
@@ -69,22 +44,19 @@ while true do
         monitor.write("No chest or barrel found")
     else
         local inventory
-        local title
+        local totalSlots
 
         if chest then
             inventory = chest.list()
-            title = "Chest Inventory"
+            totalSlots = chest.size()
         elseif barrel then
             inventory = barrel.list()
-            title = "Barrel Inventory"
+            totalSlots = barrel.size()
         end
 
-        printInventoryStatistics(monitor, inventory, title)
+        local fullStackSlots = countFullStacks(inventory)
 
-        local totalSlots = chest and chest.size() or barrel.size()
-        local usedSlots = chest and #chest.list() or #barrel.list()
-
-        drawProgressBar(monitor, usedSlots, totalSlots)
+        drawProgressBar(monitor, fullStackSlots, totalSlots)
     end
 
     sleep(5)
