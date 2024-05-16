@@ -22,22 +22,29 @@ function print_inventory_statistics(chest, barrel, monitor)
     end
     if chest == "minecraft:chest" then
         local inventory = chest.list()
-
+        local width = math.floor((x - 5) / 2)
+        local height = 1
+        monitor.setCursorPos(width, height)
+        monitor.write("chest")
         for slot, item in pairs(inventory) do
             item.name = item.name:gsub("minecraft:", "")
             local text = item.name
             local width = math.floor((x - 5) / 2)
-            local height = 1
+            local height = 2
             monitor.setCursorPos(width, height)
             monitor.write("chest")
         end
         else if barrel == "minecraft:barrel" then
             local inventory = barrel.list()
+            local width = math.floor((x - 6) / 2)
+            local height = 1
+            monitor.setCursorPos(width, height)
+            monitor.write("barrel")
             for slot, item in pairs(inventory) do
                 item.name = item.name:gsub("minecraft:", "")
                 local text = item.name
                 local width = math.floor((x - 6) / 2)
-                local height = 1
+                local height = 2
                 monitor.setCursorPos(width, height)
                 monitor.write("barrel")
             end
