@@ -5,12 +5,27 @@ if monitor == nil then
     return
 end
 
+local monitorWidth, monitorHeight = monitor.getSize()
+
+if monitorWidth < 36 then
+    monitor.setTextScale(4)
+    monitor.clear()
+    monitor.setCursorPos(1, 1)
+    monitor.write("Monitor width is too small")
+    return
+elseif monitorHeight < 13 then
+    monitor.setTextScale(6)
+    monitor.clear()
+    monitor.setCursorPos(1, 1)
+    monitor.write("Monitor height is too small")
+    return
+end
+
 monitor.setTextScale(1)
 monitor.setBackgroundColor(colors.black)
 monitor.clear()
 
 local function drawProgressBar(monitor, usedItems, totalSlots)
-    monitor.clear()
     local width, height = monitor.getSize()
     local barLength = width
     local filledLength = math.floor((usedItems / (totalSlots * 64)) * barLength)
