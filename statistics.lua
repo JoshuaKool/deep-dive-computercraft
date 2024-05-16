@@ -9,27 +9,28 @@ monitor.setTextScale(1)
 monitor.setBackgroundColor(colors.black)
 monitor.clear()
 
-local function drawProgressBar(monitor, usedItems, totalItems, totalSlots)
+local function drawProgressBarAndItemCount(monitor, usedItems, totalSlots)
     local width, height = monitor.getSize()
     local barLength = width
-    local filledLength = math.floor((usedItems / totalItems) * barLength)
+    local filledLength = math.floor((usedItems / (totalSlots * 64)) * barLength)
     local emptyLength = barLength - filledLength
-
     local barYPos = math.floor(height / 2)
+    
     monitor.setCursorPos(1, barYPos)
     monitor.setBackgroundColor(colors.green)
     monitor.write(string.rep(" ", filledLength))
     monitor.setBackgroundColor(colors.red)
     monitor.write(string.rep(" ", emptyLength))
     monitor.setBackgroundColor(colors.black)
-end
-
-local function countItems(inventory)
-    local totalItems = 0
-    for slot, item in pairs(inventory) do
-        totalItems = totalItems + item.count
+    
+    local totalItemsCount = 0
+    for slot, item in pairs(usedItems) do
+        totalItemsCount = totalItemsCount + item.count
     end
-    return totalItems
+    
+    local itemCountYPos = barYPos + 2
+    monitor.setCursorPos(1, itemCountYPos)
+    monitor.write("Total items: " .. totalItemsCount)
 end
 
 while true do
@@ -51,7 +52,7 @@ while true do
         monitor.write("Monitor height is too small")
         return
     end
-
+    
     if chest == nil and barrel == nil then
         monitor.clear()
         monitor.setCursorPos(1, 1)
@@ -59,7 +60,6 @@ while true do
     else
         local inventory
         local totalSlots
-
         if chest then
             inventory = chest.list()
             totalSlots = chest.size()
@@ -67,15 +67,7 @@ while true do
             inventory = barrel.list()
             totalSlots = barrel.size()
         end
-
-        local totalItems = countItems(inventory)
-        local usedItems = countItems(inventory)
-
-        monitor.setCursorPos(1, 1)
-        monitor.write("Total items: " .. totalItems)
-
-        drawProgressBar(monitor, usedItems, totalItems, totalSlots)
+        drawProgressBarAndItemCount(monitor, inventory, totalSlots)
     end
-
     sleep(5)
 end
