@@ -10,6 +10,7 @@ monitor.setBackgroundColor(colors.black)
 monitor.clear()
 
 local function drawProgressBar(monitor, usedItems, totalSlots)
+    monitor.clear()
     local width, height = monitor.getSize()
     local barLength = width
     local filledLength = math.floor((usedItems / (totalSlots * 64)) * barLength)

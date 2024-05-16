@@ -22,7 +22,7 @@ else
     local function checkClickPosition()
         if mouseWidth >= startX and mouseWidth <= startX + startTextWidth - 1
             and mouseHeight == startY then
-            shell.run("loading.lua")
+            os.run({}, "loading.lua")
         end
     end
 
