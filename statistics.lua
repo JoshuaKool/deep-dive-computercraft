@@ -23,9 +23,9 @@ function print_inventory_statistics(chest, barrel, monitor)
     if chest == "minecraft:chest" then
         local inventory = chest.list()
 
-        for chest in pairs(inventory) do
-            chest.name = chest.name:gsub("minecraft:", "")
-            local text = chest.name
+        for slot, item in pairs(inventory) do
+            item.name = item.name:gsub("minecraft:", "")
+            local text = item.name
             local width = math.floor((x - 5) / 2)
             local height = 1
             monitor.setCursorPos(width, height)
@@ -33,9 +33,9 @@ function print_inventory_statistics(chest, barrel, monitor)
         end
         else if barrel == "minecraft:barrel" then
             local inventory = barrel.list()
-            for barrel in pairs(inventory) do
-                barrel.name = barrel.name:gsub("minecraft:", "")
-                local text = barrel.name
+            for slot, item in pairs(inventory) do
+                item.name = item.name:gsub("minecraft:", "")
+                local text = item.name
                 local width = math.floor((x - 6) / 2)
                 local height = 1
                 monitor.setCursorPos(width, height)
@@ -51,5 +51,5 @@ while true do
     local barrel = peripheral.find("minecraft:barrel")
     print_inventory_statistics(chest, barrel, monitor)
 
-    sleep(1)
+    sleep(10)
 end
