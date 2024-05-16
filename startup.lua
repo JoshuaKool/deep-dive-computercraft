@@ -8,7 +8,7 @@ if monitor == nil then
 else
     local monitorWidth, monitorHeight = monitor.getSize()
     monitor.clear()
-    monitor.setBackgroundColor(colors.limegreen)
+    monitor.setBackgroundColor(colors.lime)
     monitor.setTextScale(2)
     monitor.setTextColor(colors.white)
 
