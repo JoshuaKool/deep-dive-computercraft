@@ -1,5 +1,5 @@
--- local function start()
--- end
+-- statistics
+
 local monitor = peripheral.find("monitor")
 monitor.clear()
-monitor.write("button")
+monitor.write("statistics")

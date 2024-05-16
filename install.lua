@@ -15,7 +15,7 @@ end
 local function Install()
     download("https://raw.githubusercontent.com/JoshuaKool/deep-dive-computercraft/main/startup.lua", "startup.lua")
     download("https://raw.githubusercontent.com/JoshuaKool/deep-dive-computercraft/main/loading.lua", "loading.lua")
-    download("https://raw.githubusercontent.com/JoshuaKool/deep-dive-computercraft/main/button.lua", "button.lua")
+    download("https://raw.githubusercontent.com/JoshuaKool/deep-dive-computercraft/main/statistics.lua", "statistics.lua")
 end
 
 Install()
