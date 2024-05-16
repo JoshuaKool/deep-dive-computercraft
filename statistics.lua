@@ -12,11 +12,11 @@ if monitor == nil then
 end
 
 if chest == "minecraft:chest" then
-    iets = "chest"
+    iets = chest
     else if shulker == "minecraft:shulker_box" then
-        iets = "shulker"
+        iets = shulker
         else if barrel == "minecraft:barrel" then
-            iets = "barrel"
+            iets = barrel
         end
     end
 end
@@ -27,17 +27,23 @@ monitor.write(x)
 monitor.setCursorPos(1, 2)
 monitor.write(y)
 
-if x < 164 then
+if x < 36 then
     monitor.setTextScale(4)
     monitor.write("Monitor width is too small")
-else if y < 52 then
+else if y < 13 then
     monitor.setTextScale(6)
     monitor.write("Monitor high is too small")
 else
     monitor.clear()
-    local width = math.floor((x - #iets) / 2)
-    local height = 1
-    monitor.setCursorPos(width, height)
-    monitor.write(iets)
+    local inventory = iets.list()
+
+    for name in pairs(inventory) do
+        name.name = name.name:gsub("minecraft:", "")
+        local text = name.name
+        local width = math.floor((x - #text) / 2)
+        local height = 1
+        monitor.setCursorPos(width, height)
+        monitor.write(text)
+    end
 end
 end
