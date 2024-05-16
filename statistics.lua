@@ -10,19 +10,19 @@ monitor.clear()
 
 local function drawVerticalProgressBar(monitor, usedItems, totalSlots)
     local width, height = monitor.getSize()
-    local barHeight = height - 1
+    local barHeight = height - 2
     local filledHeight = math.floor((usedItems / (totalSlots * 64)) * barHeight)
     local emptyHeight = barHeight - filledHeight
-    local barXPos = math.floor(width / 2)
+    local barXPos = math.floor(width / 2) 
 
     for y = 1, filledHeight do
-        monitor.setCursorPos(barXPos, height - y)
+        monitor.setCursorPos(barXPos, height - y - 1)
         monitor.setBackgroundColor(colors.green)
         monitor.write(" ")
     end
 
     for y = filledHeight + 1, barHeight do
-        monitor.setCursorPos(barXPos, height - y)
+        monitor.setCursorPos(barXPos, height - y - 1)
         monitor.setBackgroundColor(colors.red)
         monitor.write(" ")
     end
