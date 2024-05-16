@@ -8,19 +8,23 @@ if monitor == nil then
 else
     local monitorWidth, monitorHeight = monitor.getSize()
     monitor.clear()
-    monitor.setBackgroundColor(colors.lime)
     monitor.setTextScale(2)
     monitor.setTextColor(colors.white)
 
     local startText = "Start"
-    local startTextWidth = #startText * 1
+    local startTextWidth = #startText
     local startX = math.floor((monitorWidth - startTextWidth) / 2) + 1
     local startY = math.floor(monitorHeight / 2)
 
     local function drawButton()
+        monitor.clear()
+        monitor.setBackgroundColor(colors.black)
+        monitor.setTextColor(colors.white)
+
         monitor.setBackgroundColor(colors.lime)
         monitor.setCursorPos(startX, startY)
         monitor.write(startText)
+        monitor.setBackgroundColor(colors.black)
     end
 
     local function checkClickPosition()
@@ -30,12 +34,13 @@ else
         end
     end
 
+    drawButton()
+
     while true do
         local event, side, x, y = os.pullEvent()
         if event == "monitor_touch" then
             mouseWidth = x
             mouseHeight = y
-            monitor.setBackgroundColor(colors.black)
             drawButton()
             checkClickPosition()
         end
