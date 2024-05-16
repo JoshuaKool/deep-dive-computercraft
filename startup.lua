@@ -41,7 +41,6 @@ else
         if event == "monitor_touch" then
             mouseWidth = x
             mouseHeight = y
-            drawButton()
             checkClickPosition()
         end
     end

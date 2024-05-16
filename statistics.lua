@@ -37,13 +37,13 @@ while true do
     local monitorWidth, monitorHeight = monitor.getSize()
 
     if monitorWidth < 36 then
-        monitor.setTextScale(4)
+        monitor.setTextScale(2)
         monitor.clear()
         monitor.setCursorPos(1, 1)
         monitor.write("Monitor width is too small")
         return
     elseif monitorHeight < 13 then
-        monitor.setTextScale(6)
+        monitor.setTextScale(2)
         monitor.clear()
         monitor.setCursorPos(1, 1)
         monitor.write("Monitor height is too small")
@@ -67,8 +67,9 @@ while true do
         local usedItems = countItems(inventory)
         drawProgressBar(monitor, usedItems, totalSlots)
         
-        monitor.setCursorPos(1, math.floor(monitorHeight / 2) + 2)
+        monitor.setCursorPos(1, 1)
         monitor.setBackgroundColor(colors.black)
+        monitor.clearLine()
         monitor.write("Total Items: " .. usedItems)
     end
     sleep(5)
