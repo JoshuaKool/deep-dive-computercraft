@@ -8,7 +8,7 @@ if monitor == nil then
 else
     local monitorWidth, monitorHeight = monitor.getSize()
     monitor.clear()
-    monitor.setBackgroundColor(colors.limegreen)
+    monitor.setBackgroundColor(colors.green)
     monitor.setTextScale(1.5)
     monitor.setTextColor(colors.white)
 
@@ -23,7 +23,9 @@ else
     local function drawButton()
         if mouseWidth >= startX and mouseWidth <= startX + startTextWidth - 1
             and mouseHeight == startY then
-            monitor.setBackgroundColor(colors.limegreen)
+            monitor.setBackgroundColor(colors.lime)
+        else
+            monitor.setBackgroundColor(colors.green)
         end
         monitor.setCursorPos(startX, startY)
         monitor.write(startText)
