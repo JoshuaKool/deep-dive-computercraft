@@ -1,27 +1,18 @@
 local monitor = peripheral.find("monitor")
-local chest = peripheral.find("minecraft:chest")
 
-if chest == nil then
-    print("- No chest found: Attaching chest to the left side of the computer.")
-    periphemu.create('left', 'minecraft:chest', false)
-
-    print("- Adding some items to the chest...")
-    local box = peripheral.find("minecraft:chest")
-
-    if box == nil then
-        monitor.write("chest is empty")
-        return
-    end
+if monitor == nil then
+    print("No monitor found")
+    return
 end
 
--- Initialize monitor
+monitor.clear()
 monitor.setTextScale(1)
 monitor.setBackgroundColor(colors.black)
 monitor.clear()
 
--- Function to draw the progress bar
 local function drawProgressBar(usedSlots, totalSlots)
-    local barLength = monitor.getSize()  -- Get the width of the monitor
+    local width, height = monitor.getSize()
+    local barLength = width  -- We will use the width of the monitor for the progress bar
     local filledLength = math.floor((usedSlots / totalSlots) * barLength)
     local emptyLength = barLength - filledLength
 
@@ -34,23 +25,63 @@ local function drawProgressBar(usedSlots, totalSlots)
     monitor.setBackgroundColor(colors.black)
 end
 
--- Main loop
-while true do
-    -- Get the chest inventory
-    local items = chest.list()
+function print_inventory_statistics(chest, barrel, monitor)
+    local x, y = monitor.getSize()
 
-    -- Count used slots
-    local usedSlots = 0
-    for slot, item in pairs(items) do
-        usedSlots = usedSlots + 1
+    if x < 36 then
+        monitor.setTextScale(4)
+        monitor.clear()
+        monitor.setCursorPos(1, 1)
+        monitor.write("Monitor width is too small")
+        return
+    elseif y < 13 then
+        monitor.setTextScale(6)
+        monitor.clear()
+        monitor.setCursorPos(1, 1)
+        monitor.write("Monitor height is too small")
+        return
     end
 
-    -- Get total slots
-    local totalSlots = chest.size()
+    if chest then
+        local inventory = chest.list()
+        for slot, item in pairs(inventory) do
+            item.name = item.name:gsub("minecraft:", "")
+            local text = item.name
+            local width = math.floor((x - #text) / 2)
+            local height = 1
+            monitor.setCursorPos(width, height)
+            monitor.write("Chest: " .. text)
+        end
+    elseif barrel then
+        local inventory = barrel.list()
+        for slot, item in pairs(inventory) do
+            item.name = item.name:gsub("minecraft:", "")
+            local text = item.name
+            local width = math.floor((x - #text) / 2)
+            local height = 1
+            monitor.setCursorPos(width, height)
+            monitor.write("Barrel: " .. text)
+        end
+    end
+end
 
-    -- Draw the progress bar
-    drawProgressBar(usedSlots, totalSlots)
+while true do
+    local chest = peripheral.find("minecraft:chest")
+    local barrel = peripheral.find("minecraft:barrel")
 
-    -- Wait a bit before updating
-    sleep(1)
+    if chest == nil and barrel == nil then
+        monitor.clear()
+        monitor.setCursorPos(1, 1)
+        monitor.write("No chest or barrel found")
+    else
+        monitor.clear()
+        print_inventory_statistics(chest, barrel, monitor)
+
+        local totalSlots = chest and chest.size() or barrel.size()
+        local usedSlots = chest and #chest.list() or #barrel.list()
+
+        drawProgressBar(usedSlots, totalSlots)
+    end
+
+    sleep(2)
 end
