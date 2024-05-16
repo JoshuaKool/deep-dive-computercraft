@@ -19,15 +19,14 @@ else
             shell.run("loading.lua")
         end
     end
-    local touch = true
-    while touch == true do
+    while true do
         local event, side, x, y = os.pullEvent()
         if event == "monitor_touch" then
             mouseWidth = x
             mouseHeight = y
-            if checkClickPosition() then
-                touch = false
-            end
+            monitor.setBackgroundColor(colors.black)
+            checkClickPosition()
+            return false
         end
     end
 end
