@@ -11,8 +11,10 @@ else
         monitor.clear()
         monitor.setTextScale(2)
         monitor.setTextColor(colors.white)
+
         local startText = "Start"
-        local startX = math.floor((monitorWidth - #startText) / 2)
+        local startTextWidth = #startText
+        local startX = math.floor((monitorWidth - startTextWidth) / 2)
         local startY = math.floor(monitorHeight / 2)
         monitor.clear()
         monitor.setBackgroundColor(colors.black)
@@ -25,7 +27,7 @@ else
     end
 
     local function checkClickPosition()
-        if mouseWidth >= startX and mouseWidth <= startX + 5 - 1
+        if mouseWidth >= startX and mouseWidth <= startX + startTextWidth - 1
             and mouseHeight == startY then
             os.run({}, "loading.lua")
         end
