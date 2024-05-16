@@ -36,6 +36,9 @@ else if y < 13 then
 else
     monitor.clear()
     local inventory = iets.list()
+    if iets.list() == nil then
+        monitor.write("No items found")
+    end
 
     for name in pairs(inventory) do
         name.name = name.name:gsub("minecraft:", "")
