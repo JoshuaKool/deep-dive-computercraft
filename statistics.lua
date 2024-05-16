@@ -5,19 +5,17 @@ if monitor == nil then
     return
 end
 
-monitor.clear()
 monitor.setTextScale(1)
 monitor.setBackgroundColor(colors.black)
 monitor.clear()
 
-local function drawProgressBar(usedSlots, totalSlots)
+local function drawProgressBar(monitor, usedSlots, totalSlots)
     local width, height = monitor.getSize()
     local barLength = width
     local filledLength = math.floor((usedSlots / totalSlots) * barLength)
     local emptyLength = barLength - filledLength
 
-    monitor.clear()
-    monitor.setCursorPos(1, 1)
+    monitor.setCursorPos(1, 2)
     monitor.setBackgroundColor(colors.green)
     monitor.write(string.rep(" ", filledLength))
     monitor.setBackgroundColor(colors.red)
@@ -25,43 +23,38 @@ local function drawProgressBar(usedSlots, totalSlots)
     monitor.setBackgroundColor(colors.black)
 end
 
-function print_inventory_statistics(chest, barrel, monitor)
-    local x, y = monitor.getSize()
-
-    if x < 36 then
-        monitor.setTextScale(4)
-        monitor.clear()
-        monitor.setCursorPos(1, 1)
-        monitor.write("Monitor width is too small")
-        return
-    elseif y < 13 then
-        monitor.setTextScale(6)
-        monitor.clear()
-        monitor.setCursorPos(1, 1)
-        monitor.write("Monitor height is too small")
-        return
+local function countStacks(inventory)
+    local totalItems = 0
+    for slot, item in pairs(inventory) do
+        totalItems = totalItems + item.count
     end
+    return math.floor(totalItems / 64), totalItems % 64
+end
 
-    if chest then
-        local inventory = chest.list()
-        for slot, item in pairs(inventory) do
-            item.name = item.name:gsub("minecraft:", "")
-            local text = item.name
-            local width = math.floor((x - #text) / 2)
-            local height = 1
-            monitor.setCursorPos(width, height)
-            monitor.write("Chest: " .. text)
-        end
-    elseif barrel then
-        local inventory = barrel.list()
-        for slot, item in pairs(inventory) do
-            item.name = item.name:gsub("minecraft:", "")
-            local text = item.name
-            local width = math.floor((x - #text) / 2)
-            local height = 1
-            monitor.setCursorPos(width, height)
-            monitor.write("Barrel: " .. text)
-        end
+local function printInventoryStatistics(monitor, inventory, title)
+    local width, height = monitor.getSize()
+    local yPos = 1
+
+    monitor.clear()
+    monitor.setCursorPos(1, yPos)
+    monitor.write(title)
+    yPos = yPos + 1
+
+    local fullStacks, remainingItems = countStacks(inventory)
+    monitor.setCursorPos(1, yPos)
+    monitor.write("Full Stacks: " .. fullStacks)
+    yPos = yPos + 1
+    monitor.setCursorPos(1, yPos)
+    monitor.write("Remaining Items: " .. remainingItems)
+    yPos = yPos + 1
+
+    for slot, item in pairs(inventory) do
+        item.name = item.name:gsub("minecraft:", "")
+        local text = item.name .. " x" .. item.count
+        local xPos = math.floor((width - #text) / 2)
+        monitor.setCursorPos(xPos, yPos)
+        monitor.write(text)
+        yPos = yPos + 1
     end
 end
 
@@ -74,13 +67,23 @@ while true do
         monitor.setCursorPos(1, 1)
         monitor.write("No chest or barrel found")
     else
-        monitor.clear()
-        print_inventory_statistics(chest, barrel, monitor)
+        local inventory
+        local title
+
+        if chest then
+            inventory = chest.list()
+            title = "Chest Inventory"
+        elseif barrel then
+            inventory = barrel.list()
+            title = "Barrel Inventory"
+        end
+
+        printInventoryStatistics(monitor, inventory, title)
 
         local totalSlots = chest and chest.size() or barrel.size()
         local usedSlots = chest and #chest.list() or #barrel.list()
 
-        drawProgressBar(usedSlots, totalSlots)
+        drawProgressBar(monitor, usedSlots, totalSlots)
     end
 
     sleep(5)
