@@ -11,10 +11,6 @@ end
 
 function print_inventory_statistics(chest, barrel, monitor)
     local x, y = monitor.getSize()
-    monitor.setCursorPos(1, 1)
-    monitor.write(x)
-    monitor.setCursorPos(1, 2)
-    monitor.write(y)
 
     if x < 36 then
         monitor.setTextScale(4)
@@ -29,23 +25,21 @@ function print_inventory_statistics(chest, barrel, monitor)
 
         for chest in pairs(inventory) do
             chest.name = chest.name:gsub("minecraft:", "")
-            local text2 = chest.name
-            local text = "chest"
-            local width = math.floor((x - #text) / 2)
+            local text = chest.name
+            local width = math.floor((x - 5) / 2)
             local height = 1
             monitor.setCursorPos(width, height)
-            monitor.write(text)
+            monitor.write("chest")
         end
         else if barrel == "minecraft:barrel" then
             local inventory = barrel.list()
             for barrel in pairs(inventory) do
                 barrel.name = barrel.name:gsub("minecraft:", "")
-                local text2 = barrel.name
-                local text = "chest"
-                local width = math.floor((x - #text) / 2)
+                local text = barrel.name
+                local width = math.floor((x - 6) / 2)
                 local height = 1
                 monitor.setCursorPos(width, height)
-                monitor.write(text)
+                monitor.write("barrel")
             end
         end
     end
