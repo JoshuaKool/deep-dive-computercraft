@@ -1,5 +1,3 @@
-local mouseWidth = 0
-local mouseHeight = 0
 local monitor = peripheral.find("monitor")
 
 if monitor == nil then
@@ -16,7 +14,7 @@ else
         local startText = "Start"
         local startTextWidth = #startText
         local startX = math.floor((monitorWidth - startTextWidth) / 2)
-        local startY = math.floor(monitorHeight / 2)
+        local startY = math.floor((monitorHeight - 1) / 2)
         monitor.clear()
         monitor.setBackgroundColor(colors.black)
         monitor.setTextColor(colors.white)
@@ -27,12 +25,12 @@ else
         monitor.setBackgroundColor(colors.black)
     end
 
-    local function checkClickPosition()
+    local function checkClickPosition(mouseWidth, mouseHeight)
         local monitorWidth, monitorHeight = monitor.getSize()
         local startText = "Start"
         local startTextWidth = #startText
         local startX = math.floor((monitorWidth - startTextWidth) / 2)
-        local startY = math.floor(monitorHeight / 2)
+        local startY = math.floor((monitorHeight - 1) / 2)
 
         if mouseWidth >= startX and mouseWidth <= startX + startTextWidth - 1
             and mouseHeight == startY then
@@ -45,9 +43,7 @@ else
     while true do
         local event, side, x, y = os.pullEvent()
         if event == "monitor_touch" then
-            mouseWidth = x
-            mouseHeight = y
-            checkClickPosition()
+            checkClickPosition(x, y)
         end
     end
 end
