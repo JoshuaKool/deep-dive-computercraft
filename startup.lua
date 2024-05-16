@@ -10,7 +10,7 @@ else
         monitor.clear()
         monitor.setTextScale(1)
         monitor.setTextColor(colors.white)
-
+    
         local startText = "Start"
         local startTextWidth = #startText
         local startX = math.floor((monitorWidth - startTextWidth) / 2)
@@ -18,12 +18,12 @@ else
         monitor.clear()
         monitor.setBackgroundColor(colors.black)
         monitor.setTextColor(colors.white)
-
+    
         monitor.setBackgroundColor(colors.lime)
         monitor.setCursorPos(startX, startY)
         monitor.write(startText)
         monitor.setBackgroundColor(colors.black)
-    end
+    end    
 
     local function checkClickPosition(mouseWidth, mouseHeight)
         local monitorWidth, monitorHeight = monitor.getSize()
