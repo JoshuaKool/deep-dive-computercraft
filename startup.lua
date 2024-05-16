@@ -8,8 +8,8 @@ if monitor == nil then
 else
     local monitorWidth, monitorHeight = monitor.getSize()
     monitor.clear()
-    monitor.setBackgroundColor(colors.green)
-    monitor.setTextScale(1.2)
+    monitor.setBackgroundColor(colors.limegreen)
+    monitor.setTextScale(1.5)
     monitor.setTextColor(colors.white)
 
     local startText = "Start"
@@ -19,6 +19,15 @@ else
 
     monitor.setCursorPos(startX, startY)
     monitor.write(startText)
+
+    local function drawButton()
+        if mouseWidth >= startX and mouseWidth <= startX + startTextWidth - 1
+            and mouseHeight == startY then
+            monitor.setBackgroundColor(colors.limegreen)
+        end
+        monitor.setCursorPos(startX, startY)
+        monitor.write(startText)
+    end
 
     local function checkClickPosition()
         if mouseWidth >= startX and mouseWidth <= startX + startTextWidth - 1
@@ -33,6 +42,7 @@ else
             mouseWidth = x
             mouseHeight = y
             monitor.setBackgroundColor(colors.black)
+            drawButton()
             checkClickPosition()
         end
     end
