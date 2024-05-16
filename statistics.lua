@@ -46,13 +46,13 @@ while true do
     local monitorWidth, monitorHeight = monitor.getSize()
 
     if monitorWidth < 18 then
-        monitor.setTextScale(2)
+        monitor.setTextScale(0.5)
         monitor.clear()
         monitor.setCursorPos(1, 1)
         monitor.write("Must 2 bloxs wide")
         return
     elseif monitorHeight < 19 then
-        monitor.setTextScale(2)
+        monitor.setTextScale(0.5)
         monitor.clear()
         monitor.setCursorPos(1, 1)
         monitor.write("Must 3 bloxs high")
@@ -62,6 +62,7 @@ while true do
     if chest == nil and barrel == nil then
         monitor.clear()
         monitor.setCursorPos(1, 1)
+        monitor.setTextScale(0.5)
         monitor.write("No chest or barrel found")
     else
         local inventory
@@ -75,7 +76,7 @@ while true do
         end
         local usedItems = countItems(inventory)
         drawVerticalProgressBar(monitor, usedItems, totalSlots)
-        
+        monitor.setTextScale(0.5)
         monitor.setCursorPos(1, 1)
         monitor.setBackgroundColor(colors.black)
         monitor.clearLine()
