@@ -9,6 +9,7 @@ else
     local monitorWidth, monitorHeight = monitor.getSize()
     monitor.clear()
     monitor.setBackgroundColor(colors.green)
+    monitor.setTextScale(2)
     monitor.setTextColor(colors.white)
 
     local startText = "Start"
