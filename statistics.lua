@@ -22,12 +22,16 @@ if chest == "minecraft:chest" then
 end
 
 local x, y = monitor.getSize()
+monitor.setCursorPos(1, 1)
+monitor.write(x)
+monitor.setCursorPos(1, 2)
+monitor.write(y)
 
 if x < 164 then
-    monitor.setTextScale(2)
+    monitor.setTextScale(4)
     monitor.write("Monitor width is too small")
 else if y < 52 then
-    monitor.setTextScale(2)
+    monitor.setTextScale(6)
     monitor.write("Monitor high is too small")
 else
     monitor.clear()
