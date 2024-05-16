@@ -1,5 +1,4 @@
 local monitor = peripheral.find("monitor")
-monitor.clear()
 
 if monitor == nil then
     print("No monitor found")
@@ -62,5 +61,6 @@ else
     monitor.clear()
 end
 sleep(2)
+monitor.clear()
 shell.run("reboot")
 shell.run("button.lua")

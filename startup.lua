@@ -16,7 +16,7 @@ else
 
     local function checkClickPosition()
         if mouseWidth >= 0 and mouseWidth <= 6 and mouseHeight > 1 and mouseHeight < 3 then
-            shell.run("reboot")
+            monitor.clear()
             shell.run("loading.lua")
         end
     end
