@@ -13,18 +13,12 @@ else
     monitor.setTextColor(colors.white)
 
     local startText = "Start"
-    local startTextWidth = #startText
-    local startX = math.floor((monitorWidth - startTextWidth * 2) / 2) + 1
+    local startTextWidth = #startText * 2
+    local startX = math.floor((monitorWidth - startTextWidth) / 2) + 1
     local startY = math.floor(monitorHeight / 2)
 
-    monitor.setCursorPos(startX, startY)
-    monitor.write(startText)
-
     local function drawButton()
-        if mouseWidth >= startX and mouseWidth <= startX + startTextWidth - 1
-            and mouseHeight == startY then
-            monitor.setBackgroundColor(colors.lime)
-        end
+        monitor.setBackgroundColor(colors.lime)
         monitor.setCursorPos(startX, startY)
         monitor.write(startText)
     end

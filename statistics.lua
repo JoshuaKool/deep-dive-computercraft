@@ -69,11 +69,10 @@ while true do
         end
 
         local totalItems = countItems(inventory)
+        local usedItems = countItems(inventory)
 
         monitor.setCursorPos(1, 1)
         monitor.write("Total items: " .. totalItems)
-
-        local usedItems = countItems(inventory)
 
         drawProgressBar(monitor, usedItems, totalItems, totalSlots)
     end
