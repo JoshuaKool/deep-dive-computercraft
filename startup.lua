@@ -6,17 +6,15 @@ if monitor == nil then
     print("No monitor found")
     return
 else
-    local monitorWidth, monitorHeight = monitor.getSize()
-    monitor.clear()
-    monitor.setTextScale(2)
-    monitor.setTextColor(colors.white)
-
-    local startText = "Start"
-    local startTextWidth = string.len(startText)
-    local startX = math.floor((monitorWidth - startTextWidth) / 2) + 1
-    local startY = math.floor(monitorHeight / 2)
-
     local function drawButton()
+        local monitorWidth, monitorHeight = monitor.getSize()
+        monitor.clear()
+        monitor.setTextScale(2)
+        monitor.setTextColor(colors.white)
+        local startText = "Start"
+        local startTextWidth = #startText
+        local startX = math.floor((monitorWidth - startTextWidth) / 2)
+        local startY = math.floor(monitorHeight / 2)
         monitor.clear()
         monitor.setBackgroundColor(colors.black)
         monitor.setTextColor(colors.white)
