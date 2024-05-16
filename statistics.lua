@@ -35,20 +35,22 @@ while true do
     local barrel = peripheral.find("minecraft:barrel")
 
     local monitorWidth, monitorHeight = monitor.getSize()
+    monitor.setCursorPos(1, 2)
+    monitor.write(monitorWidth .. " en " .. monitorHeight)
 
-    if monitorWidth < 36 then
-        monitor.setTextScale(2)
-        monitor.clear()
-        monitor.setCursorPos(1, 1)
-        monitor.write("Monitor must be 6 bloxs wide")
-        return
-    elseif monitorHeight < 13 then
-        monitor.setTextScale(2)
-        monitor.clear()
-        monitor.setCursorPos(1, 1)
-        monitor.write("Monitor must be 4 bloxs tall")
-        return
-    end
+    --if monitorWidth < 36 then
+    --    monitor.setTextScale(2)
+    --    monitor.clear()
+    --    monitor.setCursorPos(1, 1)
+    --    monitor.write("Monitor must be 6 bloxs wide")
+    --    return
+    --elseif monitorHeight < 13 then
+    --    monitor.setTextScale(2)
+    --    monitor.clear()
+    --    monitor.setCursorPos(1, 1)
+    --    monitor.write("Monitor must be 4 bloxs tall")
+    --    return
+    --end
 
     if chest == nil and barrel == nil then
         monitor.clear()
