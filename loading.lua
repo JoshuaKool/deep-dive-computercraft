@@ -62,4 +62,5 @@ else
     monitor.clear()
 end
 sleep(2)
+shell.run("reboot")
 shell.run("button.lua")
