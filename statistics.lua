@@ -7,6 +7,7 @@ end
 monitor.setTextScale(1)
 monitor.setBackgroundColor(colors.black)
 monitor.clear()
+
 local function drawProgressBar(monitor, usedItems, totalSlots)
     local width, height = monitor.getSize()
     local barLength = width
@@ -20,6 +21,7 @@ local function drawProgressBar(monitor, usedItems, totalSlots)
     monitor.write(string.rep(" ", emptyLength))
     monitor.setBackgroundColor(colors.black)
 end
+
 local function countItems(inventory)
     local totalItems = 0
     for slot, item in pairs(inventory) do
@@ -27,6 +29,7 @@ local function countItems(inventory)
     end
     return totalItems
 end
+
 while true do
     local chest = peripheral.find("minecraft:chest")
     local barrel = peripheral.find("minecraft:barrel")
@@ -63,6 +66,10 @@ while true do
         end
         local usedItems = countItems(inventory)
         drawProgressBar(monitor, usedItems, totalSlots)
+        
+        monitor.setCursorPos(1, math.floor(monitorHeight / 2) + 2)
+        monitor.setBackgroundColor(colors.black)
+        monitor.write("Total Items: " .. usedItems)
     end
     sleep(5)
 end
