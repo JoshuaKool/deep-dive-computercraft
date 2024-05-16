@@ -1,4 +1,5 @@
 local monitor = peripheral.find("monitor")
+monitor.clear()
 monitor.setBackgroundColor(colors.black)
 
 if monitor == nil then
@@ -63,5 +64,4 @@ else
 end
 sleep(2)
 monitor.clear()
-shell.run("reboot")
-shell.run("button.lua")
+shell.run("statistics.lua")
