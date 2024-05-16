@@ -63,4 +63,4 @@ else
 end
 sleep(2)
 monitor.clear()
-os.run("statistics.lua")
+shell.run("statistics.lua")
