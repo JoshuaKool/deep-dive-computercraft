@@ -23,14 +23,17 @@ end
 
 local x, y = monitor.getSize()
 
-if x < 71 then
-    print("Monitor width is too small")
-    return
-else if y < 26 then
-    print("Monitor high is too small")
-    return
+if x < 164 then
+    monitor.setTextScale(2)
+    monitor.write("Monitor width is too small")
+else if y < 52 then
+    monitor.setTextScale(2)
+    monitor.write("Monitor high is too small")
 else
     monitor.clear()
-    monitor.write("hello")
+    local width = math.floor((x - #iets) / 2)
+    local height = 1
+    monitor.setCursorPos(width, height)
+    monitor.write(iets)
 end
 end
