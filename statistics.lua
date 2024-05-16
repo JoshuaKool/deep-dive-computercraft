@@ -1,4 +1,18 @@
-local monitor = peripheral.wrap("right")
+local monitor = peripheral.find("monitor")
+local chest = peripheral.find("minecraft:chest")
+
+if chest == nil then
+    print("- No chest found: Attaching chest to the left side of the computer.")
+    periphemu.create('left', 'minecraft:chest', false)
+
+    print("- Adding some items to the chest...")
+    local box = peripheral.find("minecraft:chest")
+
+    if box == nil then
+        monitor.write("chest is empty")
+        return
+    end
+end
 
 -- Initialize monitor
 monitor.setTextScale(1)
