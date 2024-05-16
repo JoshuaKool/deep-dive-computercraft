@@ -15,7 +15,8 @@ local function drawProgressBar(monitor, usedSlots, totalSlots)
     local filledLength = math.floor((usedSlots / totalSlots) * barLength)
     local emptyLength = barLength - filledLength
 
-    monitor.setCursorPos(1, 2)
+    local barYPos = math.floor(height / 2) -- Center the progress bar vertically
+    monitor.setCursorPos(1, barYPos)
     monitor.setBackgroundColor(colors.green)
     monitor.write(string.rep(" ", filledLength))
     monitor.setBackgroundColor(colors.red)
