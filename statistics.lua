@@ -13,21 +13,23 @@ local function drawVerticalProgressBar(monitor, usedItems, totalSlots)
     local barHeight = height - 1
     local filledHeight = math.floor((usedItems / (totalSlots * 64)) * barHeight)
     local emptyHeight = barHeight - filledHeight
+    local barXPos = math.floor(width / 2)
 
     for y = 1, filledHeight do
-        monitor.setCursorPos(width, height - y)
+        monitor.setCursorPos(barXPos, height - y)
         monitor.setBackgroundColor(colors.green)
         monitor.write(" ")
     end
 
     for y = filledHeight + 1, barHeight do
-        monitor.setCursorPos(width, height - y)
+        monitor.setCursorPos(barXPos, height - y)
         monitor.setBackgroundColor(colors.red)
         monitor.write(" ")
     end
 
     monitor.setBackgroundColor(colors.black)
 end
+
 
 local function countItems(inventory)
     local totalItems = 0
