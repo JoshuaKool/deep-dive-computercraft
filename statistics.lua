@@ -40,13 +40,13 @@ while true do
         monitor.setTextScale(2)
         monitor.clear()
         monitor.setCursorPos(1, 1)
-        monitor.write("Monitor width is too small")
+        monitor.write("Monitor must be 6 bloxs wide")
         return
     elseif monitorHeight < 13 then
         monitor.setTextScale(2)
         monitor.clear()
         monitor.setCursorPos(1, 1)
-        monitor.write("Monitor height is too small")
+        monitor.write("Monitor must be 4 bloxs tall")
         return
     end
 
