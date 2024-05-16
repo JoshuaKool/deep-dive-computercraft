@@ -9,10 +9,10 @@ monitor.setTextScale(1)
 monitor.setBackgroundColor(colors.black)
 monitor.clear()
 
-local function drawProgressBar(monitor, fullStackSlots, totalSlots)
+local function drawProgressBar(monitor, usedItems, totalSlots)
     local width, height = monitor.getSize()
     local barLength = width
-    local filledLength = math.floor((fullStackSlots / totalSlots) * barLength)
+    local filledLength = math.floor((usedItems / (totalSlots * 64)) * barLength)
     local emptyLength = barLength - filledLength
 
     local barYPos = math.floor(height / 2)
@@ -24,14 +24,12 @@ local function drawProgressBar(monitor, fullStackSlots, totalSlots)
     monitor.setBackgroundColor(colors.black)
 end
 
-local function countFullStacks(inventory)
-    local fullStackSlots = 0
+local function countItems(inventory)
+    local totalItems = 0
     for slot, item in pairs(inventory) do
-        if item.count == 64 then
-            fullStackSlots = fullStackSlots + 1
-        end
+        totalItems = totalItems + item.count
     end
-    return fullStackSlots
+    return totalItems
 end
 
 while true do
@@ -54,9 +52,9 @@ while true do
             totalSlots = barrel.size()
         end
 
-        local fullStackSlots = countFullStacks(inventory)
+        local usedItems = countItems(inventory)
 
-        drawProgressBar(monitor, fullStackSlots, totalSlots)
+        drawProgressBar(monitor, usedItems, totalSlots)
     end
 
     sleep(5)
