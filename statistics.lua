@@ -83,5 +83,5 @@ while true do
         drawProgressBar(usedSlots, totalSlots)
     end
 
-    sleep(2)
+    sleep(5)
 end
