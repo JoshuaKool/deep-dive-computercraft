@@ -12,7 +12,7 @@ monitor.clear()
 
 local function drawProgressBar(usedSlots, totalSlots)
     local width, height = monitor.getSize()
-    local barLength = width  -- We will use the width of the monitor for the progress bar
+    local barLength = width
     local filledLength = math.floor((usedSlots / totalSlots) * barLength)
     local emptyLength = barLength - filledLength
 
