@@ -15,10 +15,10 @@ monitor.setTextScale(1)
 monitor.setBackgroundColor(colors.black)
 monitor.clear()
 
-local function drawVerticalProgressBar(monitor, usedItems, totalSlots)
+local function drawVerticalProgressBar(monitor, filledPercentage)
     local width, height = monitor.getSize()
     local barHeight = height - 1
-    local filledHeight = math.floor((usedItems / (totalSlots * 64)) * barHeight)
+    local filledHeight = math.floor(filledPercentage * barHeight)
     local barXPos = math.floor(width / 2)
 
     for y = 1, filledHeight do
@@ -61,22 +61,23 @@ if isMainComputer then
             
             if event == "modem_message" and channel == 1 and replyChannel == 1 then
                 local inventoryData = message
-                totalUsedItems = totalUsedItems + inventoryData.usedItems
-                totalSlots = totalSlots + inventoryData.totalSlots
+                totalUsedItems = inventoryData.usedItems
+                totalSlots = inventoryData.totalSlots
+                break
             elseif event == "timer" and side == timeout then
+                totalSlots = -1
                 break
             end
         end
 
+        monitor.clear()
         if totalSlots > 0 then
-            drawVerticalProgressBar(monitor, totalUsedItems, totalSlots)
+            local filledPercentage = totalUsedItems / (totalSlots * 64)
+            drawVerticalProgressBar(monitor, filledPercentage)
             monitor.setTextScale(0.5)
             monitor.setCursorPos(1, 1)
-            monitor.setBackgroundColor(colors.black)
-            monitor.clearLine()
             monitor.write("Total Items: " .. totalUsedItems)
         else
-            monitor.clear()
             monitor.setCursorPos(1, 1)
             monitor.setTextScale(0.5)
             monitor.write("No inventory data received")
