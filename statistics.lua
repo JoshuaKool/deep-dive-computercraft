@@ -13,7 +13,7 @@ local function drawVerticalProgressBar(monitor, usedItems, totalSlots)
     local barHeight = height - 1
     local filledHeight = math.floor((usedItems / (totalSlots * 64)) * barHeight)
     local emptyHeight = barHeight - filledHeight
-    local barXPos = math.floor(width / 2) 
+    local barXPos = math.floor(width / 2)
 
     for y = 1, filledHeight do
         monitor.setCursorPos(barXPos, height - y)
@@ -30,8 +30,6 @@ local function drawVerticalProgressBar(monitor, usedItems, totalSlots)
     monitor.setBackgroundColor(colors.black)
 end
 
-
-
 local function countItems(inventory)
     local totalItems = 0
     for slot, item in pairs(inventory) do
@@ -40,22 +38,31 @@ local function countItems(inventory)
     return totalItems
 end
 
+local function findPeripheral(type)
+    for _, name in ipairs(peripheral.getNames()) do
+        if peripheral.getType(name) == type then
+            return peripheral.wrap(name)
+        end
+    end
+    return nil
+end
+
 while true do
-    local chest = peripheral.find("minecraft:chest")
-    local barrel = peripheral.find("minecraft:barrel")
+    local chest = findPeripheral("minecraft:chest")
+    local barrel = findPeripheral("minecraft:barrel")
     local monitorWidth, monitorHeight = monitor.getSize()
 
     if monitorWidth < 18 then
         monitor.setTextScale(0.5)
         monitor.clear()
         monitor.setCursorPos(1, 1)
-        monitor.write("Must 2 bloxs wide")
+        monitor.write("Must 2 blocks wide")
         return
     elseif monitorHeight < 19 then
         monitor.setTextScale(0.5)
         monitor.clear()
         monitor.setCursorPos(1, 1)
-        monitor.write("Must 3 bloxs high")
+        monitor.write("Must 3 blocks high")
         return
     end
 
