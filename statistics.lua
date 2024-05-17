@@ -19,7 +19,6 @@ local function drawVerticalProgressBar(monitor, usedItems, totalSlots)
     local width, height = monitor.getSize()
     local barHeight = height - 1
     local filledHeight = math.floor((usedItems / (totalSlots * 64)) * barHeight)
-    local emptyHeight = barHeight - filledHeight
     local barXPos = math.floor(width / 2)
 
     for y = 1, filledHeight do
@@ -47,49 +46,71 @@ end
 
 modem.open(1)
 
-while true do
-    local chest = peripheral.find("minecraft:chest")
-    local barrel = peripheral.find("minecraft:barrel")
-    local monitorWidth, monitorHeight = monitor.getSize()
+local isMainComputer = false
 
-    if monitorWidth < 18 then
-        monitor.setTextScale(0.5)
-        monitor.clear()
-        monitor.setCursorPos(1, 1)
-        monitor.write("Must be 2 blocks wide")
-        return
-    elseif monitorHeight < 19 then
-        monitor.setTextScale(0.5)
-        monitor.clear()
-        monitor.setCursorPos(1, 1)
-        monitor.write("Must be 3 blocks high")
-        return
-    end
+print("Is this the main computer? (yes/no)")
+local answer = read()
+if answer:lower() == "yes" then
+    isMainComputer = true
+end
 
-    if chest == nil and barrel == nil then
-        monitor.clear()
-        monitor.setCursorPos(1, 1)
-        monitor.setTextScale(0.5)
-        monitor.write("No chest or barrel found")
-    else
-        local inventory
-        local totalSlots
-        if chest then
-            inventory = chest.list()
-            totalSlots = chest.size()
-        elseif barrel then
-            inventory = barrel.list()
-            totalSlots = barrel.size()
+if isMainComputer then
+    while true do
+        modem.transmit(1, 1, "request_inventory")
+
+        local totalUsedItems = 0
+        local totalSlots = 0
+
+        local timeout = os.startTimer(5)
+        while true do
+            local event, side, channel, replyChannel, message, distance = os.pullEvent()
+            
+            if event == "modem_message" and channel == 1 and replyChannel == 1 then
+                local inventoryData = message
+                totalUsedItems = totalUsedItems + inventoryData.usedItems
+                totalSlots = totalSlots + inventoryData.totalSlots
+            elseif event == "timer" and side == timeout then
+                break
+            end
         end
 
-        local usedItems = countItems(inventory)
-        drawVerticalProgressBar(monitor, usedItems, totalSlots)
-        monitor.setTextScale(0.5)
-        monitor.setCursorPos(1, 1)
-        monitor.setBackgroundColor(colors.black)
-        monitor.clearLine()
-        monitor.write("Total Items: " .. usedItems)
-    end
+        if totalSlots > 0 then
+            drawVerticalProgressBar(monitor, totalUsedItems, totalSlots)
+            monitor.setTextScale(0.5)
+            monitor.setCursorPos(1, 1)
+            monitor.setBackgroundColor(colors.black)
+            monitor.clearLine()
+            monitor.write("Total Items: " .. totalUsedItems)
+        else
+            monitor.clear()
+            monitor.setCursorPos(1, 1)
+            monitor.setTextScale(0.5)
+            monitor.write("No inventory data received")
+        end
 
-    sleep(5)
+        sleep(5)
+    end
+else
+
+    while true do
+        local event, side, channel, replyChannel, message, distance = os.pullEvent("modem_message")
+        
+        if channel == 1 and message == "request_inventory" then
+            local chest = peripheral.find("minecraft:chest")
+            local barrel = peripheral.find("minecraft:barrel")
+            
+            local usedItems = 0
+            local totalSlots = 0
+
+            if chest then
+                usedItems = countItems(chest.list())
+                totalSlots = chest.size()
+            elseif barrel then
+                usedItems = countItems(barrel.list())
+                totalSlots = barrel.size()
+            end
+
+            modem.transmit(1, 1, {usedItems = usedItems, totalSlots = totalSlots})
+        end
+    end
 end
