@@ -17,7 +17,7 @@ end
 
 print("Modem found")
 
-modem.open(1) -- Open the modem on channel 1 to communicate with the chest
+modem.open(1)
 
 local function drawVerticalProgressBar(monitor, usedItems, totalSlots)
     local width, height = monitor.getSize()
@@ -50,7 +50,7 @@ local function countItems(inventory)
 end
 
 while true do
-    local chest = peripheral.wrap("back") -- Assuming the chest is connected at the back of the modem
+    local chest = peripheral.wrap("back")
     print("Chest:", chest)
 
     local monitorWidth, monitorHeight = monitor.getSize()
