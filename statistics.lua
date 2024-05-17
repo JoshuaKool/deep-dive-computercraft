@@ -10,7 +10,14 @@ monitor.setTextScale(1)
 monitor.setBackgroundColor(colors.black)
 monitor.clear()
 
-modem.open(1)
+if modem == nil then
+    print("No modem found")
+    return
+end
+
+print("Modem found")
+
+modem.open(1) -- Open the modem on channel 1 to communicate with the chest
 
 local function drawVerticalProgressBar(monitor, usedItems, totalSlots)
     local width, height = monitor.getSize()
@@ -43,20 +50,22 @@ local function countItems(inventory)
 end
 
 while true do
-    local chest = peripheral.wrap("back")
+    local chest = peripheral.wrap("back") -- Assuming the chest is connected at the back of the modem
+    print("Chest:", chest)
+
     local monitorWidth, monitorHeight = monitor.getSize()
 
     if monitorWidth < 18 then
         monitor.setTextScale(0.5)
         monitor.clear()
         monitor.setCursorPos(1, 1)
-        monitor.write("Must be 2 blocks width")
+        monitor.write("Monitor must be at least 2 blocks wide")
         return
     elseif monitorHeight < 19 then
         monitor.setTextScale(0.5)
         monitor.clear()
         monitor.setCursorPos(1, 1)
-        monitor.write("Must be 3 blocks height")
+        monitor.write("Monitor must be at least 3 blocks high")
         return
     end
 
