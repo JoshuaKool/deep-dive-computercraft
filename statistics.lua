@@ -1,5 +1,5 @@
 local monitor = peripheral.find("monitor")
-local mainModem = peripheral.find("modem")
+local modems = peripheral.find("modem", function(name, object) return object.isWireless() end)
 
 if monitor == nil then
     print("No monitor found")
@@ -10,14 +10,16 @@ monitor.setTextScale(1)
 monitor.setBackgroundColor(colors.black)
 monitor.clear()
 
-if mainModem == nil then
-    print("No modem found")
+if #modems == 0 then
+    print("No wireless modems found")
     return
 end
 
-print("Main modem found")
+print("Wireless modems found: " .. #modems)
 
-mainModem.open(1)
+for _, modem in ipairs(modems) do
+    modem.open(1) -- Open the modem on channel 1 to communicate with peripherals
+end
 
 local function drawVerticalProgressBar(monitor, usedItems, totalSlots)
     local width, height = monitor.getSize()
@@ -68,7 +70,12 @@ local function findChestOrBarrelConnectedToModem(modem)
 end
 
 while true do
-    local usedItems, totalSlots = findChestOrBarrelConnectedToModem(mainModem)
+    local totalUsedItems, totalSlots = 0, 0
+    for _, modem in ipairs(modems) do
+        local usedItems, slots = findChestOrBarrelConnectedToModem(modem)
+        totalUsedItems = totalUsedItems + usedItems
+        totalSlots = totalSlots + slots
+    end
 
     local monitorWidth, monitorHeight = monitor.getSize()
 
@@ -86,12 +93,12 @@ while true do
         return
     end
 
-    drawVerticalProgressBar(monitor, usedItems, totalSlots)
+    drawVerticalProgressBar(monitor, totalUsedItems, totalSlots)
     monitor.setTextScale(0.5)
     monitor.setCursorPos(1, 1)
     monitor.setBackgroundColor(colors.black)
     monitor.clearLine()
-    monitor.write("Total items: " .. usedItems)
+    monitor.write("Total items: " .. totalUsedItems)
 
     sleep(5)
 end
