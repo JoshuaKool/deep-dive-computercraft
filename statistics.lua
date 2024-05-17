@@ -65,20 +65,22 @@ end
 
 local function findChestOrBarrelConnectedToModem(modem)
     local connectedPeripherals = modem.getNamesRemote()
+    local totalUsedItems, totalSlots = 0, 0
     for _, peripheralName in ipairs(connectedPeripherals) do
         local peripheralType = peripheral.getType(peripheralName)
         if peripheralType == "minecraft:chest" or peripheralType == "minecraft:barrel" then
             local peripheralObject = peripheral.wrap(peripheralName)
             local inventory = peripheralObject.list()
-            local totalSlots = peripheralObject.size()
-            local usedItems = countItems(inventory)
-            return usedItems, totalSlots
+            totalSlots = totalSlots + peripheralObject.size()
+            totalUsedItems = totalUsedItems + countItems(inventory)
         elseif peripheralType == "modem" then
             local subModem = peripheral.wrap(peripheralName)
-            return findChestOrBarrelConnectedToModem(subModem)
+            local subUsedItems, subSlots = findChestOrBarrelConnectedToModem(subModem)
+            totalUsedItems = totalUsedItems + subUsedItems
+            totalSlots = totalSlots + subSlots
         end
     end
-    return 0, 0
+    return totalUsedItems, totalSlots
 end
 
 while true do
