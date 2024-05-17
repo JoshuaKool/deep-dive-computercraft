@@ -3,7 +3,7 @@ local peripherals = peripheral.getNames()
 local modems = {}
 
 for _, name in ipairs(peripherals) do
-    if peripheral.getType(name) == "modem" and peripheral.call(name, "isWireless") then
+    if peripheral.getType(name) == "modem" then
         table.insert(modems, peripheral.wrap(name))
     end
 end
@@ -18,14 +18,19 @@ monitor.setBackgroundColor(colors.black)
 monitor.clear()
 
 if #modems == 0 then
-    print("No wireless modems found")
+    print("No modems found")
     return
 end
 
-print("Wireless modems found: " .. #modems)
+print("Modems found: " .. #modems)
 
 for _, modem in ipairs(modems) do
-    modem.open(1)
+    local connectedPeripherals = modem.getNamesRemote()
+    for _, connectedName in ipairs(connectedPeripherals) do
+        if peripheral.getType(connectedName) == "modem" then
+            print("Modem " .. modem.getSide() .. " is connected to " .. connectedName)
+        end
+    end
 end
 
 
