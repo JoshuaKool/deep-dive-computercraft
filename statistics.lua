@@ -1,5 +1,12 @@
 local monitor = peripheral.find("monitor")
-local modems = peripheral.find("modem", function(name, object) return object.isWireless() end)
+local peripherals = peripheral.getNames()
+local modems = {}
+
+for _, name in ipairs(peripherals) do
+    if peripheral.getType(name) == "modem" and peripheral.call(name, "isWireless") then
+        table.insert(modems, peripheral.wrap(name))
+    end
+end
 
 if monitor == nil then
     print("No monitor found")
@@ -18,8 +25,9 @@ end
 print("Wireless modems found: " .. #modems)
 
 for _, modem in ipairs(modems) do
-    modem.open(1) -- Open the modem on channel 1 to communicate with peripherals
+    modem.open(1)
 end
+
 
 local function drawVerticalProgressBar(monitor, usedItems, totalSlots)
     local width, height = monitor.getSize()
