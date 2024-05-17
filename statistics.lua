@@ -6,19 +6,17 @@ if monitor == nil then
     return
 end
 
-if modem == nil then
-    print("No modem found")
-    return
-end
-
 monitor.setTextScale(1)
 monitor.setBackgroundColor(colors.black)
 monitor.clear()
 
-local function drawVerticalProgressBar(monitor, filledPercentage)
+modem.open(1)
+
+local function drawVerticalProgressBar(monitor, usedItems, totalSlots)
     local width, height = monitor.getSize()
     local barHeight = height - 1
-    local filledHeight = math.floor(filledPercentage * barHeight)
+    local filledHeight = math.floor((usedItems / (totalSlots * 64)) * barHeight)
+    local emptyHeight = barHeight - filledHeight
     local barXPos = math.floor(width / 2)
 
     for y = 1, filledHeight do
@@ -44,42 +42,39 @@ local function countItems(inventory)
     return totalItems
 end
 
-modem.open(1)
-
-local isMainComputer = true
-
 while true do
-    modem.transmit(1, 1, "request_inventory")
+    local chest = peripheral.wrap("back")
+    local monitorWidth, monitorHeight = monitor.getSize()
 
-    local totalUsedItems = 0
-    local totalSlots = 0
-
-    local timeout = os.startTimer(5)
-    while true do
-        local event, side, channel, replyChannel, message, distance = os.pullEvent()
-        
-        if event == "modem_message" and channel == 1 and replyChannel == 1 then
-            local inventoryData = message
-            totalUsedItems = inventoryData.usedItems
-            totalSlots = inventoryData.totalSlots
-            break
-        elseif event == "timer" and side == timeout then
-            totalSlots = -1
-            break
-        end
+    if monitorWidth < 18 then
+        monitor.setTextScale(0.5)
+        monitor.clear()
+        monitor.setCursorPos(1, 1)
+        monitor.write("Must be 2 blocks width")
+        return
+    elseif monitorHeight < 19 then
+        monitor.setTextScale(0.5)
+        monitor.clear()
+        monitor.setCursorPos(1, 1)
+        monitor.write("Must be 3 blocks height")
+        return
     end
 
-    monitor.clear()
-    if totalSlots > 0 then
-        local filledPercentage = totalUsedItems / (totalSlots * 64)
-        drawVerticalProgressBar(monitor, filledPercentage)
-        monitor.setTextScale(0.5)
+    if chest == nil then
+        monitor.clear()
         monitor.setCursorPos(1, 1)
-        monitor.write("Total Items: " .. totalUsedItems)
+        monitor.write("No chest found")
+        return
     else
-        monitor.setCursorPos(1, 1)
+        local inventory = chest.list()
+        local totalSlots = chest.size()
+        local usedItems = countItems(inventory)
+        drawVerticalProgressBar(monitor, usedItems, totalSlots)
         monitor.setTextScale(0.5)
-        monitor.write("fuck")
+        monitor.setCursorPos(1, 1)
+        monitor.setBackgroundColor(colors.black)
+        monitor.clearLine()
+        monitor.write("Total items: " .. usedItems)
     end
 
     sleep(5)
