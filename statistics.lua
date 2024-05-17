@@ -49,9 +49,19 @@ local function countItems(inventory)
     return totalItems
 end
 
+local function findChestConnectedToModem(modem)
+    local connectedPeripherals = modem.getNamesRemote()
+    for _, peripheralName in ipairs(connectedPeripherals) do
+        local chest = peripheral.wrap(peripheralName)
+        if chest and chest.getName() == "minecraft:chest" then
+            return chest
+        end
+    end
+    return nil
+end
+
 while true do
-    local chest = peripheral.wrap("back")
-    print("Chest:", chest)
+    local chest = findChestConnectedToModem(modem)
 
     local monitorWidth, monitorHeight = monitor.getSize()
 
