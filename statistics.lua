@@ -1,6 +1,13 @@
 local monitor = peripheral.find("monitor")
+local modem = peripheral.find("modem")
+
 if monitor == nil then
     print("No monitor found")
+    return
+end
+
+if modem == nil then
+    print("No modem found")
     return
 end
 
@@ -38,31 +45,24 @@ local function countItems(inventory)
     return totalItems
 end
 
-local function findPeripheral(type)
-    for _, name in ipairs(peripheral.getNames()) do
-        if peripheral.getType(name) == type then
-            return peripheral.wrap(name)
-        end
-    end
-    return nil
-end
+modem.open(1)
 
 while true do
-    local chest = findPeripheral("minecraft:chest")
-    local barrel = findPeripheral("minecraft:barrel")
+    local chest = peripheral.find("minecraft:chest")
+    local barrel = peripheral.find("minecraft:barrel")
     local monitorWidth, monitorHeight = monitor.getSize()
 
     if monitorWidth < 18 then
         monitor.setTextScale(0.5)
         monitor.clear()
         monitor.setCursorPos(1, 1)
-        monitor.write("Must 2 blocks wide")
+        monitor.write("Must be 2 blocks wide")
         return
     elseif monitorHeight < 19 then
         monitor.setTextScale(0.5)
         monitor.clear()
         monitor.setCursorPos(1, 1)
-        monitor.write("Must 3 blocks high")
+        monitor.write("Must be 3 blocks high")
         return
     end
 
@@ -81,6 +81,7 @@ while true do
             inventory = barrel.list()
             totalSlots = barrel.size()
         end
+
         local usedItems = countItems(inventory)
         drawVerticalProgressBar(monitor, usedItems, totalSlots)
         monitor.setTextScale(0.5)
