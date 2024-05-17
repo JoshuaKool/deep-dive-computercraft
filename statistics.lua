@@ -46,6 +46,16 @@ end
 
 modem.open(1)
 
+local function getModemList()
+    local modems = {modem}
+    for _, name in pairs(peripheral.getNames()) do
+        if peripheral.getType(name) == "modem" and name ~= peripheral.getName(modem) then
+            table.insert(modems, peripheral.wrap(name))
+        end
+    end
+    return modems
+end
+
 local isMainComputer = false
 
 print("Is this the main computer? (yes/no)")
@@ -56,11 +66,15 @@ end
 
 if isMainComputer then
     while true do
-        modem.transmit(1, 1, "request_inventory")
+        local modems = getModemList()
+        for _, m in pairs(modems) do
+            m.transmit(1, 1, "request_inventory")
+        end
 
         local totalUsedItems = 0
         local totalSlots = 0
 
+        -- Wait for responses
         local timeout = os.startTimer(5)
         while true do
             local event, side, channel, replyChannel, message, distance = os.pullEvent()
@@ -91,7 +105,6 @@ if isMainComputer then
         sleep(5)
     end
 else
-
     while true do
         local event, side, channel, replyChannel, message, distance = os.pullEvent("modem_message")
         
