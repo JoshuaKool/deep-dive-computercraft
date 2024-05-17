@@ -33,7 +33,6 @@ for _, modem in ipairs(modems) do
     end
 end
 
-
 local function drawVerticalProgressBar(monitor, usedItems, totalSlots)
     local width, height = monitor.getSize()
     local barHeight = height - 1
