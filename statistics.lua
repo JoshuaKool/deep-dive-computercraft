@@ -48,63 +48,39 @@ modem.open(1)
 
 local isMainComputer = true
 
-if isMainComputer then
+while true do
+    modem.transmit(1, 1, "request_inventory")
+
+    local totalUsedItems = 0
+    local totalSlots = 0
+
+    local timeout = os.startTimer(5)
     while true do
-        modem.transmit(1, 1, "request_inventory")
-
-        local totalUsedItems = 0
-        local totalSlots = 0
-
-        local timeout = os.startTimer(5)
-        while true do
-            local event, side, channel, replyChannel, message, distance = os.pullEvent()
-            
-            if event == "modem_message" and channel == 1 and replyChannel == 1 then
-                local inventoryData = message
-                totalUsedItems = inventoryData.usedItems
-                totalSlots = inventoryData.totalSlots
-                break
-            elseif event == "timer" and side == timeout then
-                totalSlots = -1
-                break
-            end
-        end
-
-        monitor.clear()
-        if totalSlots > 0 then
-            local filledPercentage = totalUsedItems / (totalSlots * 64)
-            drawVerticalProgressBar(monitor, filledPercentage)
-            monitor.setTextScale(0.5)
-            monitor.setCursorPos(1, 1)
-            monitor.write("Total Items: " .. totalUsedItems)
-        else
-            monitor.setCursorPos(1, 1)
-            monitor.setTextScale(0.5)
-            monitor.write("No inventory data received")
-        end
-
-        sleep(5)
-    end
-else
-    while true do
-        local event, side, channel, replyChannel, message, distance = os.pullEvent("modem_message")
+        local event, side, channel, replyChannel, message, distance = os.pullEvent()
         
-        if channel == 1 and message == "request_inventory" then
-            local chest = peripheral.find("minecraft:chest")
-            local barrel = peripheral.find("minecraft:barrel")
-            
-            local usedItems = 0
-            local totalSlots = 0
-
-            if chest then
-                usedItems = countItems(chest.list())
-                totalSlots = chest.size()
-            elseif barrel then
-                usedItems = countItems(barrel.list())
-                totalSlots = barrel.size()
-            end
-
-            modem.transmit(1, 1, {usedItems = usedItems, totalSlots = totalSlots})
+        if event == "modem_message" and channel == 1 and replyChannel == 1 then
+            local inventoryData = message
+            totalUsedItems = inventoryData.usedItems
+            totalSlots = inventoryData.totalSlots
+            break
+        elseif event == "timer" and side == timeout then
+            totalSlots = -1
+            break
         end
     end
+
+    monitor.clear()
+    if totalSlots > 0 then
+        local filledPercentage = totalUsedItems / (totalSlots * 64)
+        drawVerticalProgressBar(monitor, filledPercentage)
+        monitor.setTextScale(0.5)
+        monitor.setCursorPos(1, 1)
+        monitor.write("Total Items: " .. totalUsedItems)
+    else
+        monitor.setCursorPos(1, 1)
+        monitor.setTextScale(0.5)
+        monitor.write("fuck")
+    end
+
+    sleep(5)
 end
