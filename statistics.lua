@@ -1,5 +1,5 @@
 local monitor = peripheral.find("monitor")
-local modem = peripheral.find("modem")
+local mainModem = peripheral.find("modem")
 
 if monitor == nil then
     print("No monitor found")
@@ -10,14 +10,14 @@ monitor.setTextScale(1)
 monitor.setBackgroundColor(colors.black)
 monitor.clear()
 
-if modem == nil then
+if mainModem == nil then
     print("No modem found")
     return
 end
 
-print("Modem found")
+print("Main modem found")
 
-modem.open(1)
+mainModem.open(1)
 
 local function drawVerticalProgressBar(monitor, usedItems, totalSlots)
     local width, height = monitor.getSize()
@@ -49,19 +49,26 @@ local function countItems(inventory)
     return totalItems
 end
 
-local function findChestConnectedToModem(modem)
+local function findChestOrBarrelConnectedToModem(modem)
     local connectedPeripherals = modem.getNamesRemote()
     for _, peripheralName in ipairs(connectedPeripherals) do
-        local chest = peripheral.wrap(peripheralName)
-        if chest and chest.getName() == "minecraft:chest" then
-            return chest
+        local peripheralType = peripheral.getType(peripheralName)
+        if peripheralType == "minecraft:chest" or peripheralType == "minecraft:barrel" then
+            local peripheralObject = peripheral.wrap(peripheralName)
+            local inventory = peripheralObject.list()
+            local totalSlots = peripheralObject.size()
+            local usedItems = countItems(inventory)
+            return usedItems, totalSlots
+        elseif peripheralType == "modem" then
+            local subModem = peripheral.wrap(peripheralName)
+            return findChestOrBarrelConnectedToModem(subModem)
         end
     end
-    return nil
+    return 0, 0
 end
 
 while true do
-    local chest = findChestConnectedToModem(modem)
+    local usedItems, totalSlots = findChestOrBarrelConnectedToModem(mainModem)
 
     local monitorWidth, monitorHeight = monitor.getSize()
 
@@ -79,22 +86,12 @@ while true do
         return
     end
 
-    if chest == nil then
-        monitor.clear()
-        monitor.setCursorPos(1, 1)
-        monitor.write("No chest found")
-        return
-    else
-        local inventory = chest.list()
-        local totalSlots = chest.size()
-        local usedItems = countItems(inventory)
-        drawVerticalProgressBar(monitor, usedItems, totalSlots)
-        monitor.setTextScale(0.5)
-        monitor.setCursorPos(1, 1)
-        monitor.setBackgroundColor(colors.black)
-        monitor.clearLine()
-        monitor.write("Total items: " .. usedItems)
-    end
+    drawVerticalProgressBar(monitor, usedItems, totalSlots)
+    monitor.setTextScale(0.5)
+    monitor.setCursorPos(1, 1)
+    monitor.setBackgroundColor(colors.black)
+    monitor.clearLine()
+    monitor.write("Total items: " .. usedItems)
 
     sleep(5)
 end
